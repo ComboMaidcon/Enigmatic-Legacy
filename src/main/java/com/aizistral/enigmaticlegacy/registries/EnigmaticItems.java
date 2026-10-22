@@ -411,6 +411,10 @@ public class EnigmaticItems extends AbstractRegistry<Item> {
 	@ObjectHolder(value = MODID + ":ichor_bottle", registryName = "item")
 	public static final IchorBottle ICHOR_BOTTLE = null;
 
+	@ConfigurableItem("Spellstone Elixir")
+	@ObjectHolder(value = MODID + ":spellstone_elixir", registryName = "item")
+	public static final SpellstoneElixir SPELLSTONE_ELIXIR = null;
+
 	@ConfigurableItem
 	@ObjectHolder(value = MODID + ":quote_player", registryName = "item")
 	public static final QuotePlayer QUOTE_PLAYER = null;
@@ -532,6 +536,7 @@ public class EnigmaticItems extends AbstractRegistry<Item> {
 		this.register("enigmatic_elytra", EnigmaticElytra::new);
 		this.register("enigmatic_eye", EnigmaticEye::new);
 		this.register("ichor_bottle", IchorBottle::new);
+		this.register("spellstone_elixir", SpellstoneElixir::new);
 		this.register("quote_player", QuotePlayer::new);
 		this.register("insignia", Insignia::new);
 		this.register("cosmic_scroll", CosmicScroll::new);

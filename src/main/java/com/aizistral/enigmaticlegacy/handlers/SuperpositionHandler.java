@@ -1,5 +1,6 @@
 package com.aizistral.enigmaticlegacy.handlers;
 
+import com.aizistral.enigmaticlegacy.items.CosmicScroll;
 import java.io.File;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
@@ -1331,7 +1332,7 @@ public class SuperpositionHandler {
 	}
 
 	public static boolean hasArchitectsFavor(Player player) {
-		return isTheBlessedOne(player) && SuperpositionHandler.hasCurio(player, EnigmaticItems.COSMIC_SCROLL);
+		return CosmicScroll.canUse(player) && SuperpositionHandler.hasCurio(player, EnigmaticItems.COSMIC_SCROLL);
 	}
 
 	public static boolean isTheWorthyOne(Player player) {

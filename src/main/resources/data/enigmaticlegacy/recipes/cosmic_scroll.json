@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "conditions": [
+    {
+      "type": "enigmaticlegacy:is_enabled",
+      "item": "enigmaticlegacy:cosmic_scroll"
+    }
+  ],
+  "pattern": [
+    "DAD",
+    "ESE",
+    "DHD"
+  ],
+  "key": {
+    "D": { "item": "enigmaticlegacy:astral_dust" },
+    "A": { "item": "minecraft:enchanted_golden_apple" },
+    "E": { "item": "enigmaticlegacy:etherium_ingot" },
+    "S": { "item": "enigmaticlegacy:darkest_scroll" },
+    "H": { "item": "enigmaticlegacy:cosmic_heart" }
+  },
+  "result": {
+    "item": "enigmaticlegacy:cosmic_scroll"
+  }
+}

@@ -2861,7 +2861,8 @@ public class EnigmaticEventHandler {
 		} else if (SuperpositionHandler.getMergedEnder$EarthenDungeons().contains(event.getName())) {
 			LootPool poolSpellstones = SuperpositionHandler.constructLootPool("spellstones", -10F, 1F,
 					SuperpositionHandler.createOptionalLootEntry(EnigmaticItems.EYE_OF_NEBULA, 35),
-					SuperpositionHandler.createOptionalLootEntry(EnigmaticItems.GOLEM_HEART, 65));
+					SuperpositionHandler.createOptionalLootEntry(EnigmaticItems.GOLEM_HEART, 65),
+					SuperpositionHandler.createOptionalLootEntry(EnigmaticItems.SPELLSTONE_ELIXIR, 15));
 
 			LootTable modified = event.getTable();
 			modified.addPool(poolSpellstones);
@@ -2903,7 +2904,8 @@ public class EnigmaticEventHandler {
 		} else if (SuperpositionHandler.getEnderDungeons().contains(event.getName())) {
 			LootPool poolSpellstones = SuperpositionHandler.constructLootPool("spellstones", -12F, 1F,
 					SuperpositionHandler.createOptionalLootEntry(EnigmaticItems.EYE_OF_NEBULA, 90),
-					SuperpositionHandler.createOptionalLootEntry(EnigmaticItems.VOID_PEARL, 10));
+					SuperpositionHandler.createOptionalLootEntry(EnigmaticItems.VOID_PEARL, 10),
+					SuperpositionHandler.createOptionalLootEntry(EnigmaticItems.SPELLSTONE_ELIXIR, 25));
 
 			LootTable modified = event.getTable();
 			modified.addPool(poolSpellstones);
@@ -3109,6 +3111,8 @@ public class EnigmaticEventHandler {
 				SuperpositionHandler.setPersistentBoolean(player, EnigmaticEventHandler.NBT_KEY_ENABLESCROLL, true);
 			}
 
+			SpellstoneElixir.restoreSlots(player);
+
 			ServerRecipeBook book = player.getRecipeBook();
 			if (OmniconfigHandler.retriggerRecipeUnlocks.getValue()) {
 				for (Recipe<?> theRecipe : player.level().getRecipeManager().getRecipes()) {
@@ -3190,6 +3194,8 @@ public class EnigmaticEventHandler {
 
 		if (!player.level().isClientSide) {
 			LAST_SOUL_COMPASS_UPDATE.remove(player);
+
+			SpellstoneElixir.restoreSlots(player);
 
 			if (!event.isEndConquered()) {
 				if (SuperpositionHandler.getPersistentBoolean(player, "DestroyedCursedRing", false)) {

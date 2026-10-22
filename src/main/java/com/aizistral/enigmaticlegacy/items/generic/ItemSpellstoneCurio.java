@@ -19,7 +19,9 @@ import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
+import top.theillusivec4.curios.api.type.inventory.ICurioStacksHandler;
 
 public abstract class ItemSpellstoneCurio extends ItemBaseCurio implements ISpellstone {
 	public static Omniconfig.BooleanParameter multiequip;
@@ -65,6 +67,16 @@ public abstract class ItemSpellstoneCurio extends ItemBaseCurio implements ISpel
 	public boolean canEquip(SlotContext context, ItemStack stack) {
 		if (multiequip.getValue())
 			return super.canEquip(context, stack);
+
+		// Extra Spellstone slots (e.g. from Spellstone Elixir) allow wearing several
+		// spellstones, as long as they are different items. Slot count is synced by
+		// Curios, so this check is valid on both client and server.
+		int slots = CuriosApi.getCuriosHelper().getCuriosHandler(context.entity())
+				.map(handler -> handler.getStacksHandler("spellstone").map(ICurioStacksHandler::getSlots).orElse(0)).orElse(0);
+
+		if (slots > 1)
+			return super.canEquip(context, stack) && SuperpositionHandler.getAdvancedCurios(context.entity()).stream()
+					.noneMatch(equipped -> equipped.getItem() == stack.getItem());
 		else
 			return super.canEquip(context, stack) && SuperpositionHandler.getSpellstone(context.entity()) == null;
 	}

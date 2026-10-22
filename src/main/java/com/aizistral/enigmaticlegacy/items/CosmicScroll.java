@@ -8,13 +8,13 @@ import javax.annotation.Nullable;
 
 import com.aizistral.enigmaticlegacy.EnigmaticLegacy;
 import com.aizistral.enigmaticlegacy.api.generic.SubscribeConfig;
-import com.aizistral.enigmaticlegacy.api.items.IHidden;
 import com.aizistral.enigmaticlegacy.handlers.DevotedBelieversHandler;
 import com.aizistral.enigmaticlegacy.handlers.SuperpositionHandler;
 import com.aizistral.enigmaticlegacy.helpers.ItemLoreHelper;
 import com.aizistral.enigmaticlegacy.helpers.ItemNBTHelper;
 import com.aizistral.enigmaticlegacy.items.generic.ItemBaseCurio;
 import com.aizistral.enigmaticlegacy.packets.clients.PacketCosmicRevive;
+import com.aizistral.enigmaticlegacy.registries.EnigmaticTabs;
 import com.aizistral.omniconfig.wrappers.Omniconfig;
 import com.aizistral.omniconfig.wrappers.OmniconfigWrapper;
 import com.google.common.collect.HashMultimap;
@@ -53,12 +53,13 @@ import net.minecraftforge.network.PacketDistributor;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.SlotContext;
 
-public class CosmicScroll extends ItemBaseCurio implements IHidden {
+public class CosmicScroll extends ItemBaseCurio {
 	private static final ResourceLocation ADVANCEMENT = new ResourceLocation(EnigmaticLegacy.MODID, "main/cosmic_scroll");
 	public static Omniconfig.PerhapsParameter unchosenDamageBonus;
 	public static Omniconfig.PerhapsParameter unchosenKnockbackBonus;
 	public static Omniconfig.PerhapsParameter etheriumShieldThreshold;
 	public static Omniconfig.IntParameter deathProtectionCooldown;
+	public static Omniconfig.BooleanParameter requireBlessed;
 
 	@SubscribeConfig
 	public static void handleConfig(OmniconfigWrapper builder) {
@@ -81,7 +82,16 @@ public class CosmicScroll extends ItemBaseCurio implements IHidden {
 				.comment("Cooldown of death protection ability of The Architect's Favor. Measured in seconds.")
 				.getInt("DeathProtectionCooldown", 600);
 
+		requireBlessed = builder
+				.comment("If true, only players chosen by The Architect can equip and benefit from this scroll (original behavior). If false, anyone can use it.")
+				.getBoolean("RequireBlessed", false);
+
 		builder.popPrefix();
+	}
+
+	/** True if this player may equip the scroll and receive its effects. */
+	public static boolean canUse(Player player) {
+		return player != null && (!requireBlessed.getValue() || SuperpositionHandler.isTheBlessedOne(player));
 	}
 
 	public CosmicScroll() {
@@ -91,7 +101,7 @@ public class CosmicScroll extends ItemBaseCurio implements IHidden {
 
 	@Override
 	public CreativeModeTab getCreativeTab() {
-		return null;
+		return EnigmaticTabs.MAIN;
 	}
 
 	@Override
@@ -132,7 +142,9 @@ public class CosmicScroll extends ItemBaseCurio implements IHidden {
 		}
 
 		ItemLoreHelper.addLocalizedString(list, "tooltip.enigmaticlegacy.void");
-		ItemLoreHelper.indicateBlessedOnesOnly(list);
+		if (requireBlessed.getValue()) {
+			ItemLoreHelper.indicateBlessedOnesOnly(list);
+		}
 	}
 
 	public boolean hasCooldown(ItemStack scroll) {
@@ -154,7 +166,7 @@ public class CosmicScroll extends ItemBaseCurio implements IHidden {
 
 	@Override
 	public boolean canEquip(SlotContext context, ItemStack stack) {
-		return super.canEquip(context, stack) && context.entity() instanceof Player player && SuperpositionHandler.isTheBlessedOne(player);
+		return super.canEquip(context, stack) && context.entity() instanceof Player player && canUse(player);
 	}
 
 	@Override
@@ -210,7 +222,7 @@ public class CosmicScroll extends ItemBaseCurio implements IHidden {
 	@SubscribeEvent(priority = EventPriority.LOWEST)
 	public void onTooltip(ItemTooltipEvent event) {
 		if (event.getItemStack().is(this)) {
-			if (EnigmaticLegacy.PROXY.getClientPlayer() != null && SuperpositionHandler.isTheBlessedOne(EnigmaticLegacy.PROXY.getClientPlayer()))
+			if (EnigmaticLegacy.PROXY.getClientPlayer() != null && canUse(EnigmaticLegacy.PROXY.getClientPlayer()))
 				return;
 
 			List<Component> tooltip = event.getToolTip();
@@ -228,7 +240,7 @@ public class CosmicScroll extends ItemBaseCurio implements IHidden {
 		if (event.getEntity() instanceof Player && !event.getEntity().level().isClientSide) {
 			Player player = (Player) event.getEntity();
 
-			if (SuperpositionHandler.isTheBlessedOne(player)) {
+			if (canUse(player)) {
 				ItemStack scroll = SuperpositionHandler.getCurioStack(player, this);
 
 				if (scroll != null && !this.hasCooldown(scroll)) {

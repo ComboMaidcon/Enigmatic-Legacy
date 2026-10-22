@@ -118,28 +118,7 @@ curseforge {
     }
 }
 
-modrinth {
-    token = findProperty('modrinthKey') ?: '0'
-    projectId = "IpUWAlqM"
-    versionNumber = project.version
-	versionName = "Enigmatic Legacy v" + project.version
-    versionType = "release"
-	changelog = "See on CurseForge: https://www.curseforge.com/minecraft/mc-mods/enigmatic-legacy/files"
-    uploadFile = jar
-    gameVersions = [ project.version_mc ]
-	loaders = [ 'forge' ]
-    dependencies {
-		// The scope can be `required`, `optional`, or `incompatible`
-		required.project "nU0bVIaL"
-		required.project "vvuO3ImH"
-		required.project "40FYwb4z"
-    }
-	
-	syncBodyFrom = rootProject.file("docs/README.md").text
-}
-
 task upload {
-	dependsOn('modrinth')
 	dependsOn('curseforge')
 }
 
@@ -149,8 +128,6 @@ tasks.withType(JavaCompile) {
 
 jar.finalizedBy('reobfJar')
 //publish.dependsOn('reobfJar')
-
-tasks.modrinth.dependsOn(tasks.modrinthSyncBody)
 
 publishing {
 

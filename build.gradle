@@ -28,10 +28,6 @@ buildscript {
     }
 }
 
-plugins {
-    id "com.modrinth.minotaur" version "2.+"
-}
-
 println("Applying plugins...")
 
 apply plugin: 'eclipse'

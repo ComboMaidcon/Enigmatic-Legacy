@@ -1890,6 +1890,9 @@
 	"tooltip.enigmaticlegacy.cosmicScroll13": "§5players who are not chosen, and your melee",
 	"tooltip.enigmaticlegacy.cosmicScroll14": "§5attacks set them ablaze.",
 	"tooltip.enigmaticlegacy.cosmicScrollCooldown": "§dRemaining Cooldown: §6%1$s §6seconds",
+
+	"tooltip.enigmaticlegacy.spellstoneElixir1": "§5Consume to obtain §6+1§d Spellstone Slot §5permanently.",
+	"tooltip.enigmaticlegacy.spellstoneElixir2": "§5Can be consumed up to §6%1$s§5 time(s) in total.",
 	
 	"book.enigmaticlegacy.entry.cosmic_scroll.name": "The Architect's Favor",
 	"book.enigmaticlegacy.entry.cosmic_scroll.page.1": "The might of this rumor-shadowed scroll is denied to most demigods, even those who have approached the godship rather close. Who is permitted to possess it is at the discretion of The Architect himself, and as rumors would have it - the journey to $(l:https://discord.gg/fuWK8ns)his domain$(/l) is long and full of dangers, and to be noticed by that godly being is an honor few of its dwellers ever had.",
